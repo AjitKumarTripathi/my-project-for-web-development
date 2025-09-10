@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.5s ease-in-out;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2.5em;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 320px;
+            max-width: 90%;
+        }
+        h2 {
+            margin-bottom: 1.2em;
+            font-size: 1.8em;
+        }
+        .game-selection-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .game-selection-options button {
+            width: 100%;
+            padding: 1em;
+            border: none;
+            border-radius: 6px;
+            background: #99f2c8;
+            color: #1f4037;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            font-size: 1.2em;
+        }
+        .game-selection-options button:hover {
+            background: #6cbf9b;
+            transform: translateY(-2px);
+        }
+        .form-group {
+            margin-bottom: 1.2em;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6em;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.7em;
+            border: none;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+        .toggle-form {
+            margin-top: 1.5em;
+            color: #99f2c8;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: underline;
+        }
+        .toggle-form:hover {
+            color: #fff;
+        }
+        .game-page, #login-signup-page {
+            display: none;
+        }
+        .login-options button, .signup-options button {
+            width: 100%;
+            padding: 0.8em;
+            border: none;
+            border-radius: 6px;
+            background: #99f2c8;
+            color: #1f4037;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            font-size: 1.1em;
+        }
+        .game-buttons button {
+            width: auto;
+            margin: 0.6em;
+            padding: 1.2em 1.8em;
+            font-size: 1.3em;
+            background: #3498db;
+            color: white;
+            border-radius: 8px;
+        }
+        .logout-button {
+            margin-top: 25px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.8em;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div id="main-selection-page" class="container">
+    <h2>Choose Your Game</h2>
+    <div class="game-selection-options">
+        <button onclick="prepareLogin('rock-paper-scissors')">Rock-Paper-Scissors</button>
+        <button onclick="prepareLogin('guessing-game')">Guessing Game</button>
+        <button onclick="prepareLogin('dice-roll')">Dice Roll Game</button>
+    </div>
+</div>
+
+<div id="login-signup-page" class="container">
+    <div id="login-form">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" required>
+        </div>
+        <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" required>
+        </div>
+        <div class="login-options">
+            <button onclick="loginUser()">Login</button>
+        </div>
+        <div class="toggle-form" onclick="showSignup()">Sign Up</div>
+    </div>
+
+    <div id="signup-form" style="display: none;">
+        <h2>Sign Up</h2>
+        <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required>
+        </div>
+        <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required>
+        </div>
+        <div class="signup-options">
+            <button onclick="signupUser()">Create Account</button>
+        </div>
+        <div class="toggle-form" onclick="showLogin()">Login</div>
+    </div>
+</div>
+
+<div id="rock-paper-scissors-page" class="container game-page">
+    <h2>Rock-Paper-Scissors</h2>
+    <p>Choose your move:</p>
+    <div class="game-buttons">
+        <button onclick="playRPS('rock')">Rock</button>
+        <button onclick="playRPS('paper')">Paper</button>
+        <button onclick="playRPS('scissors')">Scissors</button>
+    </div>
+    <p id="rps-result-text"></p>
+    <p id="rps-score-text">Score: You 0 - Computer 0</p>
+    <button class="logout-button" onclick="logoutUser()">Logout</button>
+</div>
+
+<div id="guessing-game-page" class="container game-page">
+    <h2>Guessing Game</h2>
+    <p>Guess a number between 1 and 100:</p>
+    <input type="number" id="guess-input" min="1" max="100">
+    <button onclick="checkGuess()">Guess</button>
+    <p id="guess-result-text"></p>
+    <button class="logout-button" onclick="logoutUser()">Logout</button>
+</div>
+
+<div id="dice-roll-page" class="container game-page">
+    <h2>Dice Roll</h2>
+    <p>Click to roll the dice:</p>
+    <h1 id="dice-result">?</h1>
+    <button onclick="rollDice()">Roll</button>
+    <button class="logout-button" onclick="logoutUser()">Logout</button>
+</div>
+
+<div id="logout-message-page" class="container" style="display:none;">
+    <h2>Welcome Master</h2>
+    <p>Have a nice day</p>
+</div>
+
+<script>
+    let userScoreRPS = 0;
+    let computerScoreRPS = 0;
+    let randomNumberGuess = Math.floor(Math.random() * 100) + 1;
+    let selectedGame = ''; // Variable to store which game was selected
+
+    // Set background images for different pages
+    const backgrounds = {
+        main: 'https://picsum.photos/id/1052/1920/1080',
+        loginSignup: 'https://picsum.photos/id/161/1920/1080',
+        rpsGame: 'https://picsum.photos/id/30/1920/1080',
+        guessingGame: 'https://picsum.photos/id/40/1920/1080',
+        diceRollGame: 'https://picsum.photos/id/50/1920/1080',
+        logout: 'https://picsum.photos/id/60/1920/1080'
+    };
+
+    function setBackground(imageUrl) {
+        document.body.style.backgroundImage = `url('${imageUrl}')`;
+    }
+
+    // New function to show main game selection page
+    function showMainPage() {
+        document.getElementById('main-selection-page').style.display = 'block';
+        document.getElementById('login-signup-page').style.display = 'none';
+        hideAllGamePages();
+        setBackground(backgrounds.main);
+    }
+
+    // New function to prepare for login after selecting a game
+    function prepareLogin(gameType) {
+        selectedGame = gameType;
+        document.getElementById('main-selection-page').style.display = 'none';
+        document.getElementById('login-signup-page').style.display = 'block';
+        setBackground(backgrounds.loginSignup);
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('signup-form').style.display = 'none';
+    }
+
+    function showLogin() {
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('signup-form').style.display = 'none';
+        setBackground(backgrounds.loginSignup);
+    }
+
+    function showSignup() {
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('signup-form').style.display = 'block';
+        setBackground(backgrounds.loginSignup);
+    }
+
+    function hideAllGamePages() {
+        const gamePages = document.getElementsByClassName('game-page');
+        for (let i = 0; i < gamePages.length; i++) {
+            gamePages[i].style.display = 'none';
+        }
+    }
+
+    // Updated loginUser to use the selectedGame variable
+    function loginUser() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        if (email && password) {
+            hideAllGamePages();
+            document.getElementById('login-signup-page').style.display = 'none';
+
+            if (selectedGame === 'rock-paper-scissors') {
+                document.getElementById('rock-paper-scissors-page').style.display = 'block';
+                setBackground(backgrounds.rpsGame);
+            } else if (selectedGame === 'guessing-game') {
+                document.getElementById('guessing-game-page').style.display = 'block';
+                setBackground(backgrounds.guessingGame);
+                randomNumberGuess = Math.floor(Math.random() * 100) + 1;
+            } else if (selectedGame === 'dice-roll') {
+                document.getElementById('dice-roll-page').style.display = 'block';
+                setBackground(backgrounds.diceRollGame);
+            }
+        } else {
+            alert('Please fill out the email and password.');
+        }
+    }
+
+    function signupUser() {
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+
+        if (email && password) {
+            alert('Account created successfully! Please login.');
+            showLogin();
+        } else {
+            alert('Please fill out the email and password.');
+        }
+    }
+
+    function logoutUser() {
+        hideAllGamePages();
+        document.getElementById('logout-message-page').style.display = 'block';
+        setBackground(backgrounds.logout);
+
+        userScoreRPS = 0;
+        computerScoreRPS = 0;
+        document.getElementById('rps-result-text').innerText = '';
+        document.getElementById('rps-score-text').innerText = 'Score: You 0 - Computer 0';
+        randomNumberGuess = Math.floor(Math.random() * 100) + 1;
+        document.getElementById('guess-result-text').innerText = '';
+        document.getElementById('dice-result').innerText = '?';
+
+        setTimeout(() => {
+            document.getElementById('logout-message-page').style.display = 'none';
+            showMainPage();
+        }, 3000);
+    }
+
+    // Game-specific functions
+    function playRPS(userChoice) {
+        const choices = ['rock', 'paper', 'scissors'];
+        const computerChoice = choices[Math.floor(Math.random() * 3)];
+        let result = '';
+        if (userChoice === computerChoice) {
+            result = 'It\'s a tie!';
+        } else if ((userChoice === 'rock' && computerChoice === 'scissors') ||
+            (userChoice === 'paper' && computerChoice === 'rock') ||
+            (userChoice === 'scissors' && computerChoice === 'paper')) {
+            result = 'You win!';
+            userScoreRPS++;
+        } else {
+            result = 'Computer wins!';
+            computerScoreRPS++;
+        }
+        document.getElementById('rps-result-text').innerText = `Your choice: ${userChoice}. Computer's choice: ${computerChoice}. ${result}`;
+        document.getElementById('rps-score-text').innerText = `Score: You ${userScoreRPS} - Computer ${computerScoreRPS}`;
+    }
+
+    function checkGuess() {
+        const userGuess = parseInt(document.getElementById('guess-input').value);
+        let resultText = document.getElementById('guess-result-text');
+        if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+            resultText.innerText = 'Please enter a valid number between 1 and 100.';
+            return;
+        }
+        if (userGuess < randomNumberGuess) {
+            resultText.innerText = 'Your guess is too low!';
+        } else if (userGuess > randomNumberGuess) {
+            resultText.innerText = 'Your guess is too high!';
+        } else {
+            resultText.innerText = `Congratulations! You guessed the correct number (${randomNumberGuess}).`;
+            randomNumberGuess = Math.floor(Math.random() * 100) + 1;
+        }
+    }
+
+    function rollDice() {
+        const diceResult = Math.floor(Math.random() * 6) + 1;
+        document.getElementById('dice-result').innerText = diceResult;
+    }
+
+    // Initial page load
+    document.addEventListener('DOMContentLoaded', showMainPage);
+</script>
+
+</body>
+</html>
